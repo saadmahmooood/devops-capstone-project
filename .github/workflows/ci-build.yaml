@@ -1,5 +1,4 @@
 name: CI Build
-
 on:
   push:
     branches:
@@ -28,24 +27,20 @@ jobs:
           --health-retries 5
 
     steps:
-      # 1. Checkout the code
       - name: Checkout
         uses: actions/checkout@v2
 
-      # 2. Install Python dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip wheel
           pip install -r requirements.txt
 
-      # 3. Lint with flake8
       - name: Lint with flake8
         run: |
           flake8 service --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 service --count --max-complexity=10 --max-line-length=127 --statistics
 
-      # 4. Run unit tests with Nose (and coverage)
       - name: Run unit tests with nose
-        run: nosetests -v --with-spec --spec-color --with-coverage --cover-package=service
+        run: nosetests
         env:
           DATABASE_URI: "postgresql://postgres:pgs3cr3t@postgres:5432/testdb"
